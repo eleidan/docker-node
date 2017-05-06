@@ -1,14 +1,14 @@
 FROM eleidan/buildpack-deps:jessie
 
 LABEL maintainer="Oleg Kulyk" \
-      description="NodeJS 4.8.3 with Yarn 0.23.4 based on Debian Jessie" \
+      description="Node.js 4.8.3 with Yarn 0.23.4 based on Debian Jessie" \
       init="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/node:4.8.3-jessie docker-init.sh" \
       run="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/node:4.8.3-jessie bash" \
       version="2017-05-06"
 
-ENV NODE_VERSION="4.8.3" \
+ENV NODE_VERSION=4.8.3 \
     NPM_CONFIG_LOGLEVEL="info" \
-    YARN_VERSION="0.23.4"
+    YARN_VERSION=0.23.4
 
 
 ENV SERVICE_NAME="node:${NODE_VERSION}-jessie"
