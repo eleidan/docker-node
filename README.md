@@ -5,52 +5,52 @@ Want to use **docker** and **docker-compose** in your development pipeline? Welc
 All the images have the following features:
 1.  Hint for the command to initialize a new project so that it can be **docker-compose** friendly.
 
-  Spawn the following command in terminal:
-  ```
-  docker inspect <image> -f "{{.Config.Labels.init}}"
-  ```
-  *NOTE*: Replace `<image>` with appropriate image name or ID.
+    Spawn the following command in terminal:
+    ```
+    docker inspect <image> -f "{{.Config.Labels.init}}"
+    ```
+    *NOTE*: Replace `<image>` with appropriate image name or ID.
 
-  **Example**: With an image name
-  ```
-  docker inspect eleidan/node:5.12.0-jessie -f "{{.Config.Labels.init}}"
-  ```
-  As a result, the following output is expected:
-  ```
-  docker run -it --rm -v $(pwd):/home/phantom/app eleidan/node:5.12.0-jessie docker-init.sh
-  ```
+    **Example**: With an image name
+    ```
+    docker inspect eleidan/node:5.12.0-jessie -f "{{.Config.Labels.init}}"
+    ```
+    As a result, the following output is expected:
+    ```
+    docker run -it --rm -v $(pwd):/home/phantom/app eleidan/node:5.12.0-jessie docker-init.sh
+    ```
 
-  Now, check if it is possible to spawn a container with **docker-compose**.
-  Issue the following command:
-  ```
-  docker-compose run dev
-  ```
-  A prompt of the container is expected to welcome you:
-  ```
-  [ 172.19.0.2 | node_app.dev | ~/app ]
-  >
-  ```
+    Now, check if it is possible to spawn a container with **docker-compose**.
+    Issue the following command:
+    ```
+    docker-compose run dev
+    ```
+    A prompt of the container is expected to welcome you:
+    ```
+    [ 172.19.0.2 | node_app.dev | ~/app ]
+    >
+    ```
 
 2.  Hint for the command to run a container.
 
-  Spawn the following command in terminal:
-  ```
-  docker inspect <image> -f "{{.Config.Labels.run}}"
-  ```
-  *NOTE*: Replace `<image>` with appropriate image name or ID.
+    Spawn the following command in terminal:
+    ```
+    docker inspect <image> -f "{{.Config.Labels.run}}"
+    ```
+    *NOTE*: Replace `<image>` with appropriate image name or ID.
 
-  **Example**: With an image name
-  ```
-  docker inspect eleidan/node:5.12.0-jessie -f "{{.Config.Labels.run}}"
-  ```
-  As a result, the following output is expected:
-  ```
-  docker run -it --rm -v $(pwd):/home/phantom/app eleidan/node:5.12.0-jessie bash
-  ```
+    **Example**: With an image name
+    ```
+    docker inspect eleidan/node:5.12.0-jessie -f "{{.Config.Labels.run}}"
+    ```
+    As a result, the following output is expected:
+    ```
+    docker run -it --rm -v $(pwd):/home/phantom/app eleidan/node:5.12.0-jessie bash
+    ```
 
-  Running the command above provides the following:
-    * Current directory is mounted to the `/home/phantom/app` directory inside the container.
-    * New container is spawned in interaction mode with a nifty shell prompt and proper user `UID` and `GID`.
+    Running the command above provides the following:
+      * Current directory is mounted to the `/home/phantom/app` directory inside the container.
+      * New container is spawned in interaction mode with a nifty shell prompt and proper user `UID` and `GID`.
 
 3.  Nifty shell prompt with the container IP and a service name provided by the container.
 
