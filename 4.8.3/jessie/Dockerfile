@@ -14,7 +14,8 @@ ENV NODE_VERSION=4.8.3 \
 ENV SERVICE_NAME="node:${NODE_VERSION}-jessie"
 
 USER root
-# gpg keys listed at https://github.com/nodejs/node#release-team
+
+# Install Node.js
 RUN set -ex \
     && for key in \
       9554F04D7259F04124DE6B476D5A82AC7E37093B \
@@ -39,6 +40,7 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
     && rm "node-v$NODE_VERSION-linux-x64.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt \
     && ln -s /usr/local/bin/node /usr/local/bin/nodejs
 
+# Install Yarn package manager
 RUN set -ex \
     && for key in \
       6A010C5166006599AA17F08146C2130DFD2497F5 \
@@ -59,7 +61,7 @@ WORKDIR "${HOME}/app"
 COPY docker-init.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-init.sh
 
-### Needed for the docker-init.sh script
+# Needed for the docker-init.sh script
 COPY recipes $HOME/recipes
 
 ENV PATH=$PATH:/home/phantom/app/node_modules/.bin/
