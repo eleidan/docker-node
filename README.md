@@ -1,4 +1,7 @@
 #   Node.js Docker Image
+[![Docker Build](https://img.shields.io/docker/automated/eleidan/node.svg?style=flat-square)](https://hub.docker.com/r/eleidan/node/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/eleidan/node.svg?style=flat-square)](https://hub.docker.com/r/eleidan/node/)
+
 Want to use **docker** and **docker-compose** in your development pipeline? Welcome!
 
 ##  Features
