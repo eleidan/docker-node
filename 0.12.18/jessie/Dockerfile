@@ -4,15 +4,12 @@ LABEL maintainer="Oleg Kulyk" \
       description="Node.js 0.12.18 based on Debian Jessie" \
       init="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/node:0.12.18-jessie docker-init.sh" \
       run="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/node:0.12.18-jessie bash" \
-      version="2017-05-06"
+      version="2017-05-08"
 
 ENV NODE_VERSION=0.12.18 \
-    NPM_CONFIG_LOGLEVEL="info"
-
-
-ENV SERVICE_NAME="node:${NODE_VERSION}-jessie"
-
-USER root
+    NPM_CONFIG_LOGLEVEL="info" \
+    PATH=$PATH:/home/phantom/app/node_modules/.bin/ \
+    SERVICE_NAME="node:0.12.18-jessie"
 
 # Install Node.js
 RUN set -ex \
@@ -39,15 +36,10 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
     && rm "node-v$NODE_VERSION-linux-x64.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt \
     && ln -s /usr/local/bin/node /usr/local/bin/nodejs
 
-WORKDIR "${HOME}/app"
-
 COPY docker-init.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-init.sh
 
 # Needed for the docker-init.sh script
 COPY recipes $HOME/recipes
 
-ENV PATH=$PATH:/home/phantom/app/node_modules/.bin/
-
-
-CMD ["/bin/bash"]
+WORKDIR "${HOME}/app"

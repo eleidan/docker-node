@@ -4,16 +4,13 @@ LABEL maintainer="Oleg Kulyk" \
       description="Node.js 6.10.3 with Yarn 0.23.4 based on Debian Jessie" \
       init="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/node:6.10.3-jessie docker-init.sh" \
       run="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/node:6.10.3-jessie bash" \
-      version="2017-05-06"
+      version="2017-05-08"
 
 ENV NODE_VERSION=6.10.3 \
     NPM_CONFIG_LOGLEVEL="info" \
-    YARN_VERSION=0.23.4
-
-
-ENV SERVICE_NAME="node:${NODE_VERSION}-jessie"
-
-USER root
+    YARN_VERSION=0.23.4 \
+    PATH=$PATH:/home/phantom/app/node_modules/.bin/ \
+    SERVICE_NAME="node:6.10.3-jessie"
 
 # Install Node.js
 RUN set -ex \
@@ -56,15 +53,10 @@ RUN set -ex \
     && mv yarn.js /usr/local/bin/yarn \
     && chmod +x /usr/local/bin/yarn
 
-WORKDIR "${HOME}/app"
-
 COPY docker-init.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-init.sh
 
 # Needed for the docker-init.sh script
 COPY recipes $HOME/recipes
 
-ENV PATH=$PATH:/home/phantom/app/node_modules/.bin/
-
-
-CMD ["/bin/bash"]
+WORKDIR "${HOME}/app"
