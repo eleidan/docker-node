@@ -3,7 +3,7 @@ FROM eleidan/buildpack-deps:jessie
 LABEL maintainer="Oleg Kulyk" \
       description="Node.js 7.10.0 with Yarn 0.23.4 based on Debian Jessie" \
       init="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/node:7.10.0-jessie docker-init.sh" \
-      run="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/node:7.10.0-jessie bash" \
+      run="docker run -it --rm -v $(pwd):/home/phantom/app eleidan/node:7.10.0-jessie" \
       version="2017-05-08"
 
 ENV NODE_VERSION=7.10.0 \
