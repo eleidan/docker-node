@@ -1,0 +1,14 @@
+version: '3'
+
+volumes:
+  bash-history:
+
+services:
+  dev:
+    image: eleidan/node:draft
+    build:
+      context: ./14.15.4/ubuntu/20.04
+    user: phantom
+    volumes:
+      - .:/home/phantom/app
+      - bash-history:/home/phantom/bash-history
