@@ -1,0 +1,116 @@
+#!/usr/bin/env bash
+################################################################################
+PROGRAM=$(basename $0)
+read -r -d '' USAGE << EOM
+Create release sources based on existing one.
+
+Usage:
+  $PROGRAM -r VERSION
+  $PROGRAM [--help]
+
+Options:
+  -r VERSION            Specify version to create.
+  -h, --help            Print help message.
+EOM
+
+
+################################################################################
+function show_usage_and_exit_with_code {
+  echo "$USAGE"
+  exit $1
+}
+
+
+function process_params {
+  if [[ "$1" = "--" ]]; then
+    show_usage_and_exit_with_code 1
+  fi
+
+  while true; do
+    case "$1" in
+        -r)
+            RELEASE_VERSION="$2"
+            shift 2
+            ;;
+        -h|--help)
+            show_usage_and_exit_with_code 0
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Programming error"
+            exit 3
+            ;;
+    esac
+  done
+}
+
+
+function validate_release_is_specified {
+  if [[ "${RELEASE_VERSION}x" = "x" ]]; then
+    echo "Error: Elixir release is not specified"
+    exit 1
+  fi
+}
+
+function validate_input {
+  validate_release_is_specified
+}
+################################################################################
+getopt --test > /dev/null
+if [[ $? -ne 4 ]]; then
+    echo "I’m sorry, `getopt --test` failed in this environment."
+    exit 1
+fi
+
+SHORT="r:h"
+LONG="help"
+PARSED=$(getopt --options $SHORT --longoptions $LONG --name "$0" -- "$@")
+
+
+if [[ $? -ne 0 ]]; then
+    # e.g. $? == 1
+    #  then getopt has complained about wrong arguments to stdout
+    exit 2
+fi
+
+# Flat out parsed params into list of arguments
+eval set -- "$PARSED"
+################################################################################
+
+process_params $@
+validate_input
+mkdir -p ${RELEASE_VERSION}
+SOURCE_VERSION="14.15.4"
+cp -R ${SOURCE_VERSION}/* ${RELEASE_VERSION}/
+
+SEMVER_PATTERN="[0-9]+\.[0-9]+\.*[0-9]*"
+ROOT_DIR=$(pwd)
+
+pushd ${SOURCE_VERSION} > /dev/null
+for distro_family in $(ls); do
+  pushd $distro_family > /dev/null
+  for distro_release in $(ls); do
+    TARGET_FILE="${ROOT_DIR}/${RELEASE_VERSION}/${distro_family}/${distro_release}/Dockerfile"
+    sed -i -r \
+      -e "s/Node\.js ${SEMVER_PATTERN}/Node\.js ${RELEASE_VERSION}/g" \
+      -e "s/node:${SEMVER_PATTERN}/node:${RELEASE_VERSION}/g" \
+      -e "s/NODE_VERSION=\S*/NODE_VERSION=\"${RELEASE_VERSION}\"/g" \
+      -e "s/version=\S*/version=\"$(date +"%F")\"/g" \
+      ${TARGET_FILE}
+
+    TARGET_FILE="${ROOT_DIR}/${RELEASE_VERSION}/${distro_family}/${distro_release}/recipes/docker-compose.yml"
+    sed -i -r \
+      -e "s/node:${SEMVER_PATTERN}/node:${RELEASE_VERSION}/g" \
+      ${TARGET_FILE}
+
+    TARGET_FILE="${ROOT_DIR}/${RELEASE_VERSION}/${distro_family}/${distro_release}/recipes/Dockerfile"
+    sed -i -r \
+      -e "s/node:${SEMVER_PATTERN}/node:${RELEASE_VERSION}/g" \
+      ${TARGET_FILE}
+    done
+    popd > /dev/null
+  done
+popd > /dev/null
