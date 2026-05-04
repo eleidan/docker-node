@@ -1,0 +1,12 @@
+volumes:
+  bash-history:
+
+services:
+  dev:
+    image: eleidan/node:24
+    build:
+      context: ./24.15.0/ubuntu/26.04
+    user: phantom
+    volumes:
+      - .:/home/phantom/app
+      - bash-history:/home/phantom/bash-history
