@@ -1,4 +1,4 @@
-FROM eleidan/base:ubuntu-20.04
+FROM eleidan/node:24
 
 USER root
 
