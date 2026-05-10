@@ -2,8 +2,8 @@ FROM eleidan/base:ubuntu-26.04
 
 LABEL maintainer="Oleg Kulyk" \
       description="Node.js 24.15.0 based on Ubuntu 26.04" \
-      init="docker run -it --rm --user $(id -u) -v $(pwd):/home/phantom/app eleidan/node:24.15.0-ubuntu-26.04 docker-init.sh" \
-      run="docker run -it --rm --user $(id -u) -v $(pwd):/home/phantom/app eleidan/node:24.15.0-ubuntu-26.04" \
+      init="docker run -it --rm --user $(id -u) -v $(pwd):/home/phantom/app eleidan/node:24 docker-init.sh" \
+      run="docker run -it --rm --user $(id -u) -v $(pwd):/home/phantom/app eleidan/node:24" \
       version="2026-05-04"
 
 WORKDIR "${HOME}/app"
